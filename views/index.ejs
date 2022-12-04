@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/style.css" />
+    <title>To Do List</title>
+  </head>
+  <body>
+    <% if (!message == '') { %>
+    <section class="message message-<%= type %>">
+      <p><%= message %></p>
+      <span id="close-message"><img src="/images/Close.svg" alt="" /></span>
+    </section>
+
+    <% } %>
+
+    <header>
+      <% if(task == null) {%> 
+        <%- include('./components/form', {titleForm:'Lista de Tarefa', action: 'create', value: '', idBtn: 'addButton',nameBtn: 'Adicionar'})%>
+        
+      <% }else { %> 
+        <%- include('./components/form',{titleForm: 'Editar Tarefa', action: `updateOne/${task._id}`, value:task.task, idBtn: 'updateButton', nameBtn: 'Atualizar'})%>  
+      <% } %>
+    </header>
+
+    <section id="tasks">
+      <ul>
+        <% tasksList.forEach((task) =>{ %>
+        <li>
+          <div class="oneTask">
+            <a href="/"><%= task.task %></a>
+            <span>Criado em<%= task.data.toLocaleDateString('pt-BR') %></span>
+          </div>
+
+          <div>
+            <a class="btnUpdate" href="/getById/<%= task._id%>/update">
+              <img src="/images/PencilLine.svg" alt="" />
+            </a>
+            <a class="btnDelete" href="/getById/<%= task._id%>/delete">
+              <img src="/images/Trash.svg" alt="" />
+            </a>
+          </div>
+        </li>
+
+        <% }) %>
+      </ul>
+    </section>
+
+    <% if(taskDelete != null) {%>
+    <section id="modal">
+      <div id="card">
+        <div id="head">
+          <h2>Confirmação</h2>
+          <a id="close" href="/"><img src="/images/Close.svg" alt="" /></a>
+        </div>
+
+        <p>Deseja realmente apagar a tarefa: "<%= taskDelete.task%>" ?</p>
+        <div id="btns">
+          <a id="btnNot" href="/">Não</a>
+          <a id="btnYes" href="/deleteOne/<%= taskDelete._id %>">Sim</a>
+        </div>
+      </div>
+    </section>
+    <% } %>
+
+    <script src="script.js"></script>
+  </body>
+</html>
